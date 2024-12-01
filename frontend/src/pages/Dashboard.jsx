@@ -6,64 +6,70 @@ import NumberFlow from '@number-flow/react'
 export default function Dashboard() {
   const [selectedOption, setSelectedOption] = useState('Breakfast');
   const [userdata, setUserdata] = useState({});
-  // console.log(userdata);
-  const [calorie, setCalorie] = useState(0);
   const [error, setError] = useState('');
-  const [stats, setStats] = useState({
-    protein: 0,
-    carbs: 0,
-    fats:0,
-    fiber:0,
-  }); // for food stats 
-  const [foodName, setFoodName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [mealData, setMealData] = useState({
-    Breakfast: [],
-    Lunch: [],
-    Evening: [],
-    Dinner: [],
+  // console.log(userdata);
+  const [calorie, setCalorie] = useState(() => {
+    const savedCalorie = localStorage.getItem('calorie');
+    return savedCalorie ? Number(savedCalorie) : 0;
   });
 
-  
-    // Save data to localStorage
-    const saveToLocalStorage = () => {
-      localStorage.setItem('calorie', calorie);
-      localStorage.setItem('stats', JSON.stringify(stats));
-      localStorage.setItem('mealData', JSON.stringify(mealData));
+  const [stats, setStats] = useState(() => {
+    const savedStats = localStorage.getItem('stats');
+    return savedStats ? JSON.parse(savedStats) : { protein: 0, carbs: 0, fats: 0, fiber: 0 };
+  });
+
+  const [mealData, setMealData] = useState(() => {
+    const savedMealData = localStorage.getItem('mealData');
+    return savedMealData ? JSON.parse(savedMealData) : {
+      Breakfast: [],
+      Lunch: [],
+      Evening: [],
+      Dinner: [],
     };
-  
-    // Load data from localStorage
-    const loadFromLocalStorage = () => {
-      const savedCalorie = localStorage.getItem('calorie');
-      const savedStats = localStorage.getItem('stats');
-      const savedMealData = localStorage.getItem('mealData');
-  
-      if (savedCalorie) setCalorie(Number(savedCalorie));
-      if (savedStats) setStats(JSON.parse(savedStats));
-      if (savedMealData) setMealData(JSON.parse(savedMealData));
-    };
-  
-    useEffect(() => {
-      loadFromLocalStorage();
-    }, []);
-  
-    useEffect(() => {
-      saveToLocalStorage();
-    }, [calorie, stats, mealData]);
-  
-  
+  });
+  const [foodName, setFoodName] = useState('');
+  const [amount, setAmount] = useState('');
+
+
+  // Save data to localStorage
+  const saveToLocalStorage = () => {
+    localStorage.setItem('calorie', calorie);
+    localStorage.setItem('stats', JSON.stringify(stats));
+    localStorage.setItem('mealData', JSON.stringify(mealData));
+  };
+
+  // Load data from localStorage
+  const loadFromLocalStorage = () => {
+    const savedCalorie = localStorage.getItem('calorie');
+    const savedStats = localStorage.getItem('stats');
+    const savedMealData = localStorage.getItem('mealData');
+
+    if (savedCalorie !== null) setCalorie(Number(savedCalorie)); // Use Number() to convert string to number
+    if (savedStats !== null) setStats(JSON.parse(savedStats));   // Parse JSON for stats
+    if (savedMealData !== null) setMealData(JSON.parse(savedMealData)); // Parse JSON for mealData
+  };
+
+  useEffect(() => {
+    loadFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    saveToLocalStorage();
+  }, [calorie, stats, mealData]);
+
+
   const parseAndUpdateStatsFromText = (text) => {
     if (!text) {
       console.error('Empty response text');
       return;
     }
-  
+
     const currentStats = {};
     text.split(',').forEach((item) => {
       const [key, value] = item.split(':').map((str) => str.trim());
-      currentStats[key] = parseFloat(value); 
+      currentStats[key] = parseFloat(value);
     });
-  
+
     // Updating the states
     setCalorie((prevCalorie) => prevCalorie + currentStats.calories || 0);
     setStats((prevStats) => ({
@@ -160,7 +166,7 @@ export default function Dashboard() {
         { geminiApiKey: newApiKey },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       if (response.data.success) {
         alert("API key updated successfully.");
       } else {
@@ -243,8 +249,8 @@ export default function Dashboard() {
             />
           </div>
           <p className="text-lg font-medium text-gray-700 mb-2">NET CALORIES</p>
-          <p className="text-3xl font-bold text-gray-900"><NumberFlow value = {calorie}/></p>
-          <button className="mt-6 bg-teal-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-teal-600"  onClick={handleUpdateApiKey}>
+          <p className="text-3xl font-bold text-gray-900"><NumberFlow value={calorie} /></p>
+          <button className="mt-6 bg-teal-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-teal-600" onClick={handleUpdateApiKey}>
             Update your API key here
           </button>
         </div>
@@ -260,7 +266,7 @@ export default function Dashboard() {
         {/* Carbs */}
         <div className="bg-yellow-200 p-4 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-gray-800">Carbs</h3>
-          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.carbs}/></p>
+          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.carbs} /></p>
         </div>
 
         {/* Fiber */}
