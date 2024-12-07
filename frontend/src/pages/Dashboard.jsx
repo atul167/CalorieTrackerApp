@@ -4,7 +4,6 @@ import config from '../config';
 import NumberFlow from '@number-flow/react';
 import { Line } from 'react-chartjs-2'; 
 import dayjs from 'dayjs';
-
 export default function Dashboard() {
   const [selectedOption, setSelectedOption] = useState('Breakfast');
   const [userdata, setUserdata] = useState({});
@@ -84,7 +83,7 @@ export default function Dashboard() {
     if (!token) return;
     
     try {
-      await axios.post(`${REACT_APP_API_BASE_URL}/api/calories/update`, {
+      await axios.post(`${config.API_BASE_URL}/api/calories/update`, {
         additionalCalories: caloriesAdded,
         additionalProtein: proteinAdded,
         additionalCarbs: carbsAdded,
@@ -219,7 +218,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FFB9B9] flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#ffcece] flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Calorie Tracker</h1>
       <h3 className="text-2xl font-bold text-gray-800 mb-8">Today's date is {dt}</h3>
       <div className="bg-pink-100 p-8 rounded-lg shadow-lg max-w-4xl w-full grid grid-cols-2 gap-8">
@@ -278,7 +277,7 @@ export default function Dashboard() {
             <img src="./eathealthy.png" alt="Meal Illustration" className="rounded-full" />
           </div>
           <p className="text-lg font-medium text-gray-700 mb-2">NET CALORIES</p>
-          <p className="text-3xl font-bold text-gray-900"><NumberFlow value={calorie} /></p>
+          <p className="text-3xl font-bold text-gray-900"><NumberFlow value={calorie} /><span>  kcal</span></p>
           <button className="mt-6 bg-teal-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-teal-600" onClick={handleUpdateApiKey}>
             Update your API key here
           </button>
@@ -287,23 +286,23 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-4 gap-4 m-4">
         <div className="bg-yellow-200 p-4 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800">Protein</h3>
-          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.protein} /></p>
+          <h3 className="text-lg flex justify-center font-semibold text-gray-800">Protein</h3>
+          <p className="text-2xl font-bold text-gray-900 flex justify-center items-center"><NumberFlow value={stats.protein} /><span>  g</span></p>
         </div>
 
         <div className="bg-yellow-200 p-4 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800">Carbs</h3>
-          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.carbs} /></p>
+          <h3 className="text-lg flex justify-center font-semibold text-gray-800">Carbs</h3>
+          <p className="text-2xl font-bold text-gray-900 flex justify-center items-center"><NumberFlow value={stats.carbs} /><span>  g</span></p>
         </div>
 
         <div className="bg-yellow-200 p-4 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800">Fiber</h3>
-          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.fiber} /></p>
+          <h3 className="text-lg flex justify-center font-semibold text-gray-800">Fiber</h3>
+          <p className="text-2xl font-bold text-gray-900 flex justify-center items-center"><NumberFlow value={stats.fiber} /><span>  g</span></p>
         </div>
 
         <div className="bg-yellow-200 p-4 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-800">Fats</h3>
-          <p className="text-2xl font-bold text-gray-900"><NumberFlow value={stats.fats} /></p>
+          <h3 className="text-lg flex justify-center font-semibold text-gray-800">Fats</h3>
+          <p className="text-2xl font-bold text-gray-900 flex justify-center items-center "><NumberFlow value={stats.fats} /><span>  g</span></p>
         </div>
       </div>
 

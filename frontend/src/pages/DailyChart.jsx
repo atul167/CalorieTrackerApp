@@ -65,16 +65,17 @@ export default function MultiChart() {
     },
     scales: {
       x: { title: { display: true, text: 'Date' } },
-      y: { title: { display: true, text: titleText } },
+      y: {
+        beginAtZero: true, title: { display: true, text: titleText } },
     },
   });
 
   return (
-    <div className="max-w-5xl mx-auto my-8 p-4 bg-white shadow-lg rounded-md space-y-8">
+    <div className="max-w-5xl mx-auto my-8 p-4  shadow-lg rounded-md space-y-8">
       <h1 className="text-3xl font-bold mb-4 text-center">Daily Nutrient & Calorie Trends</h1>
 
       {/* Calories Chart  */}
-      <div>
+      <div className="bg-[#f8ffe7]">
         <h2 className="text-xl font-bold mb-2">Calories Over Time</h2>
         <Line 
           data={createChartData(caloriesData, 'Calories', 'rgba(255, 99, 132, 1)', 'rgba(255, 99, 132, 0.2)')} 
@@ -83,7 +84,7 @@ export default function MultiChart() {
       </div>
 
       {/* Protein Chart  */}
-      <div>
+      <div className="bg-[#f8ffe7]">
         <h2 className="text-xl font-bold mb-2">Protein Over Time</h2>
         <Line 
           data={createChartData(proteinData, 'Protein (g)', 'rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 0.2)')} 
@@ -92,7 +93,7 @@ export default function MultiChart() {
       </div>
 
       {/* Carbs Chart  */}
-      <div>
+      <div className="bg-[#f8ffe7]">
         <h2 className="text-xl font-bold mb-2">Carbs Over Time</h2>
         <Line 
           data={createChartData(carbsData, 'Carbs (g)', 'rgba(255, 206, 86, 1)', 'rgba(255, 206, 86, 0.2)')} 
@@ -101,7 +102,7 @@ export default function MultiChart() {
       </div>
 
       {/* Fats Chart  */}
-      <div>
+      <div className="bg-[#f8ffe7]">
         <h2 className="text-xl font-bold mb-2">Fats Over Time</h2>
         <Line 
           data={createChartData(fatsData, 'Fats (g)', 'rgba(75, 192, 192, 1)', 'rgba(75, 192, 192, 0.2)')} 
@@ -110,7 +111,7 @@ export default function MultiChart() {
       </div>
 
       {/* Fiber Chart */}
-      <div>
+      <div className="bg-[#f8ffe7]">
         <h2 className="text-xl font-bold mb-2">Fiber Over Time</h2>
         <Line 
           data={createChartData(fiberData, 'Fiber (g)', 'rgba(153, 102, 255, 1)', 'rgba(153, 102, 255, 0.2)')} 
