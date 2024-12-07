@@ -5,13 +5,16 @@ import { register, login } from "../controller/userController.js";
 import auth from "../middleware/auth.js";
 import User from "../models/User.js";
 
-router.post("/getanswer", auth.apply, async(req, res)=> {
-  const { avg } = req.body;
+router.post("/tracker", auth, async(req, res)=> {
+  const { avg ,profile } = req.body;
+  const user = req.user; 
+  const apikey = user.geminiApiKey;
+  console.log('Average is {avg}')
   try {
     const genAI = apikey ? new GoogleGenerativeAI(apikey) : null;
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt = `Pls tell how much is this calorie high or low for human `;
-    // console.log(prompt);
+    const prompt = `I am a ${profile.gender} and my age is ${profile.age} , my height is ${profile.height} cm , my weight is ${profile.weight} kg. I am currently consuming around ${avg} calories diet everyday. Please analyse my stats and tell me if I am doing well according to my stats and what would you recommend. You can also give some good tips for good diet and sleep Keep the response limited to 8-9 lines`;
+    console.log(prompt);
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
@@ -24,7 +27,7 @@ router.post("/getanswer", auth.apply, async(req, res)=> {
   }
 })
 
-router.post("/calculate-food-stats",auth,async (req, res) => {
+router.post("/calculate-food-stats", auth, async (req, res) => {
   const { name, amount } = req.body;
   const user = req.user; 
   const apikey = user.geminiApiKey;

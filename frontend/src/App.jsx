@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import DailyChart from './pages/DailyChart';
 import Tracker from './pages/Tracker';
+import Profile from './pages/Profile';
 function App() {
 
   return (
@@ -30,6 +31,10 @@ function App() {
          <Route
           path="/tracker"
           element={<Tracker />}
+        />
+        <Route
+          path="/profile"
+          element={<Profile />}
         />
       </Routes>
     </div>
