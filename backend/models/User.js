@@ -44,6 +44,5 @@ UserSchema.methods.getGeminiApiKey = function () {
   }
   return null;
 };
-
 const User = mongoose.model('User', UserSchema);
 export default User;

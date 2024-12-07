@@ -4,6 +4,26 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { register, login } from "../controller/userController.js";
 import auth from "../middleware/auth.js";
 import User from "../models/User.js";
+
+router.post("/getanswer", auth.apply, async(req, res)=> {
+  const { avg } = req.body;
+  try {
+    const genAI = apikey ? new GoogleGenerativeAI(apikey) : null;
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `Pls tell how much is this calorie high or low for human `;
+    // console.log(prompt);
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
+    res.json({
+      text,
+    });
+  } catch (error) {
+    console.error("Error calling generative AI API:", error);
+    res.status(500).json({ error: "Failed to calculate food stats" });
+  }
+})
+
 router.post("/calculate-food-stats",auth,async (req, res) => {
   const { name, amount } = req.body;
   const user = req.user; 

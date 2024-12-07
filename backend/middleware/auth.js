@@ -10,10 +10,9 @@ const auth = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // This is for verification !
 
     const user = await User.findById(decoded.id); // Fetch user from the database using the decoded ID
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
-    }
+    } 
     req.user = {
       id: user._id,
       email: user.email,
