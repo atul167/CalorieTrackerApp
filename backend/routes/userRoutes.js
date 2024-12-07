@@ -8,7 +8,6 @@ router.post("/calculate-food-stats",auth,async (req, res) => {
   const { name, amount } = req.body;
   const user = req.user; 
   const apikey = user.geminiApiKey;
-  console.log('API KEY IS', apikey);
   try {
     const genAI = apikey ? new GoogleGenerativeAI(apikey) : null;
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -18,9 +17,8 @@ router.post("/calculate-food-stats",auth,async (req, res) => {
      Finally most important instructions give info in form of single line like this: calories: <calories>, protein: <protein>, carbs: <carbs>, fats: <fats>, fiber: <fiber> Dont write anything before or after this just give me this single line as output.`;
     // console.log(prompt);
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = result.response;
     const text = response.text();
-    console.log(text);
     res.json({
       text,
     });

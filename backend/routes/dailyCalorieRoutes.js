@@ -3,9 +3,9 @@ import express from 'express';
 const router = express.Router();
 
 import auth from '../middleware/auth.js';
-import { addDailyCalories, getDailyCalories } from '../controller/dailyCalorieController.js';
+import {add_updateDailyCalories,getAllCalorieData} from '../controller/dailyCalorieController.js';
 
-router.post('/', auth, addDailyCalories);
-router.get('/', auth, getDailyCalories);
+router.post('/update', auth, add_updateDailyCalories);
+router.get('/getData', auth, getAllCalorieData);
 
 export default router;

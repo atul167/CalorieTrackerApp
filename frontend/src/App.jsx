@@ -5,6 +5,7 @@ import Navbar from './components/navbar';
 import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import DailyChart from './pages/DailyChart';
 
 function App() {
 
@@ -21,6 +22,10 @@ function App() {
         <Route
           path="/dashboard"
           element={<Dashboard />}
+        />
+        <Route
+          path="/analytics"
+          element={<DailyChart />}
         />
       </Routes>
     </div>

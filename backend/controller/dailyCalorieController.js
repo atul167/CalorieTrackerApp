@@ -1,42 +1,66 @@
 // controllers/dailyCalorieController.js
 import DailyCalorie from '../models/DailyCalorie.js';
+import dayjs from 'dayjs';
 
-export const addDailyCalories = async (req, res) => {
+export const add_updateDailyCalories = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { date, totalCalories } = req.body;
+    const {
+      additionalCalories = 0,
+      additionalProtein = 0,
+      additionalCarbs = 0,
+      additionalFats = 0,
+      additionalFiber = 0,
+    } = req.body;
 
-    // Validate input
-    if (!date || totalCalories == null) {
-      return res.status(400).json({ error: 'Date and totalCalories are required' });
-    }
+    const today = dayjs().format('YYYY-MM-DD'); // standardized date string
 
-    // Check if entry for the date already exists
-    let dailyCalorie = await DailyCalorie.findOne({ user: userId, date });
-    if (dailyCalorie) {
-      // Update existing entry
-      dailyCalorie.totalCalories = totalCalories;
-      await dailyCalorie.save();
+    let record = await DailyCalorie.findOne({ user: userId, date: today });
+    if (!record) {
+      // If no record exists for today, create a new one with the provided values
+      record = new DailyCalorie({
+        user: userId,
+        date: today,
+        totalCalories: additionalCalories,
+        protein: additionalProtein,
+        carbs: additionalCarbs,
+        fats: additionalFats,
+        fiber: additionalFiber,
+      });
     } else {
-      // Create new entry
-      dailyCalorie = new DailyCalorie({ user: userId, date, totalCalories });
-      await dailyCalorie.save();
+      // If record exists, increment the existing values
+      record.totalCalories += additionalCalories;
+      record.protein += additionalProtein;
+      record.carbs += additionalCarbs;
+      record.fats += additionalFats;
+      record.fiber += additionalFiber;
     }
 
-    res.status(201).json(dailyCalorie);
+    await record.save();
+
+    res.json({
+      success: true,
+      totalCalories: record.totalCalories,
+      protein: record.protein,
+      carbs: record.carbs,
+      fats: record.fats,
+      fiber: record.fiber,
+    });
   } catch (error) {
-    console.error('Failed to save daily calories:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error updating daily calories:', error);
+    res.status(500).json({ error: 'Failed to update daily calories' });
   }
 };
 
-export const getDailyCalories = async (req, res) => {
+export async function getAllCalorieData(req, res) {
   try {
     const userId = req.user.id;
-    const dailyCalories = await DailyCalorie.find({ user: userId }).sort({ date: -1 });
-    res.json(dailyCalories);
+    const userCaloriedata = await DailyCalorie.find({ user: userId });
+    console.log(userCaloriedata);
+    // userCaloriedata is now an array of objects, each with totalCalories and macros
+    res.json({ userCaloriedata });
   } catch (error) {
-    console.error('Failed to fetch daily calories:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error fetching daily calories data', error);
+    res.status(500).json({ error: 'Failed to fetch daily calories' });
   }
-};
+}
