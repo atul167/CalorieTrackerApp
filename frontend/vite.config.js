@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['axios','dayjs','bcrypt'],
+      external: ['axios','dayjs','bcryptjs'],
     },
   },
 })
