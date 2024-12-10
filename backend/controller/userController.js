@@ -2,14 +2,21 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
+// Register a new user
 export const register = async (req, res) => {
   try {
     const { email, password, geminiApiKey } = req.body;
 
-    // Check if user already exists
-    let user = await User.findOne({ email });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    // Check if user already exists using lean for faster query
+    let user = await User.findOne({ email }).lean();
     if (user) return res.status(400).json({ error: "User already exists" });
 
+    // Create and save new user
     user = new User({ email, password, geminiApiKey });
     await user.save();
 
@@ -20,19 +27,29 @@ export const register = async (req, res) => {
   }
 };
 
+// Login an existing user
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    // Find user by email using lean for performance
+    const user = await User.findOne({ email }).lean();
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
-    const isMatch = await user.comparePassword(password);
+    // Compare passwords
+    const isMatch = await User.comparePassword(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
+    // Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
+
     res.json({ token, user: { id: user._id, email: user.email } });
   } catch (error) {
     console.error("User login error:", error);
@@ -40,16 +57,20 @@ export const login = async (req, res) => {
   }
 };
 
+// Get authenticated user's data
 export const getUserData = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password"); // Exclude password
+    // Find user by ID and exclude password using lean for performance
+    const user = await User.findById(req.user.id).select("-password").lean();
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    //decrypting the Gemini API key
-    const decryptedApiKey = user.getGeminiApiKey();
+    // Decrypt Gemini API key
+    const decryptedApiKey = user.geminiApiKey
+      ? User.getGeminiApiKey(user.geminiApiKey)
+      : null;
 
     res.json({
       email: user.email,
