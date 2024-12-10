@@ -1,7 +1,7 @@
 // controllers/userController.js
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-
+import bcrypt from 'bcryptjs';
 // Register a new user
 export const register = async (req, res) => {
   try {
@@ -42,7 +42,9 @@ export const login = async (req, res) => {
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
     // Compare passwords
-    const isMatch = await User.comparePassword(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
     // Generate JWT token

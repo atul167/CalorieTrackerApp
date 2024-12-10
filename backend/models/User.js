@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
   geminiApiKey: { type: String },
 });
 
+
 // Explicitly define indexes
 UserSchema.index({ email: 1 }, { unique: true });
 
@@ -35,9 +36,6 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.methods.comparePassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
 
 // Decrypt Gemini API key
 UserSchema.methods.getGeminiApiKey = function () {
