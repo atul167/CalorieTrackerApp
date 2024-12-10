@@ -4,10 +4,13 @@ import bcrypt from 'bcryptjs';
 import CryptoJS from 'crypto-js';
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
   geminiApiKey: { type: String },
 });
+
+// Explicitly define indexes
+UserSchema.index({ email: 1 }, { unique: true });
 
 // Hash password before saving
 UserSchema.pre('save', async function (next) {
@@ -44,5 +47,6 @@ UserSchema.methods.getGeminiApiKey = function () {
   }
   return null;
 };
+
 const User = mongoose.model('User', UserSchema);
 export default User;
