@@ -220,7 +220,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[#e8f0fc] flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen  flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Calorie Tracker</h1>
       <h3 className="text-2xl font-bold text-gray-800 mb-8">Today's date is {dt}</h3>
       <div className="bg-pink-100 p-8 rounded-lg shadow-lg max-w-4xl w-full grid grid-cols-2 gap-8">
