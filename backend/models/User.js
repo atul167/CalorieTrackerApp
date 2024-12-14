@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import CryptoJS from 'crypto-js';
+import { z } from 'zod';
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, index: true },
@@ -9,6 +10,13 @@ const UserSchema = new mongoose.Schema({
   geminiApiKey: { type: String },
 });
 
+export const InputUserSchema = z.object({
+  email: z.string()
+    .email("Invalid email format"),
+  password: z.string()
+    .min(6, "Password needs be at least 6 digits"),
+  geminiApiKey: z.string()
+});
 
 // Explicitly define indexes
 UserSchema.index({ email: 1 }, { unique: true });

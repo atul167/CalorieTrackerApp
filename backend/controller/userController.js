@@ -1,5 +1,6 @@
 // controllers/userController.js
 import User from "../models/User.js";
+import InputUserSchema from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
 // Register a new user
@@ -15,6 +16,12 @@ export const register = async (req, res) => {
     // Check if user already exists using lean for faster query
     let user = await User.findOne({ email }).lean();
     if (user) return res.status(400).json({ error: "User already exists" });
+
+    const validation = InputUserSchema.safeParse(req.body);
+    if (!validation.success) {
+      // TODO the error msg needs handled better way. below one shows for the password errors only
+      return res.status(400).json({ error: "Enter a password of at least 6 char lenghts"});
+    }
 
     // Create and save new user
     user = new User({ email, password, geminiApiKey });
