@@ -35,13 +35,13 @@ export default function MultiChart() {
   const sortedData = [...dailyData].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Format dates as "DD-MM-YYYY"
-  const labels = sortedData.map(entry => dayjs(entry.date, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+  const labels = sortedData.map(entry => dayjs(entry.date, 'YYYY-MM-DD').format('DD-MM-YYYY')).slice(-7);
 
-  const caloriesData = sortedData.map(entry => entry.totalCalories);
-  const proteinData = sortedData.map(entry => entry.protein || 0);
-  const carbsData = sortedData.map(entry => entry.carbs || 0);
-  const fatsData = sortedData.map(entry => entry.fats || 0);
-  const fiberData = sortedData.map(entry => entry.fiber || 0);
+  const caloriesData = sortedData.map(entry => entry.totalCalories).slice(-7);
+  const proteinData = sortedData.map(entry => entry.protein || 0).slice(-7);
+  const carbsData = sortedData.map(entry => entry.carbs || 0).slice(-7);
+  const fatsData = sortedData.map(entry => entry.fats || 0).slice(-7);
+  const fiberData = sortedData.map(entry => entry.fiber || 0).slice(-7);
 
   // Utility function to create chart data objects with custom colors
   const createChartData = (dataArr, labelText, borderColor, bgColor) => ({
