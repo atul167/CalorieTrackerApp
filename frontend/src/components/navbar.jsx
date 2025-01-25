@@ -7,6 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleAnalytics = () => navigate('/analytics');
+  const handleBMI = () => navigate('/bmi');
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -87,6 +88,12 @@ const Navbar = () => {
                   className="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
                 >
                   My Profile
+                </button>
+                <button 
+                  onClick={handleBMI}
+                  className="bg-[#2b9cff] text-white hover:bg-[#815eff] px-4 py-2 rounded-md text-sm font-medium transition duration-300 flex items-center"
+                >
+                  Check BMI
                 </button>
                 <button 
                   onClick={handleLogout}

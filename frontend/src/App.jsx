@@ -1,14 +1,8 @@
 // src/App.js
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Dashboard, Register, Login, DailyChart, Tracker, Profile, Bmi } from './pages';
 import Navbar from './components/navbar';
-import Dashboard from './pages/Dashboard';
-import Register from './pages/Register';
-import Login from './pages/Login';
-import DailyChart from './pages/DailyChart';
-import Tracker from './pages/Tracker';
-import Profile from './pages/Profile';
-
 function App() {
   const location = useLocation();
 
@@ -18,7 +12,6 @@ function App() {
 
   return (
     <div>
-      {/* Conditionally render Navbar */}
       {shouldShowNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
@@ -28,6 +21,7 @@ function App() {
         <Route path="/analytics" element={<DailyChart />} />
         <Route path="/tracker" element={<Tracker />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/bmi" element={<Bmi />} />
       </Routes>
     </div>
   );
